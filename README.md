@@ -1,5 +1,5 @@
 # TintJS Web Component Library
-The TintJS is my experiment library to play with Web Component. Most API designed inspired from Polymer, a tiny library from Google to make you easier build web component. 
+The TintJS is my experiment library to play with Web Component. Most API was designed using some references from Polymer and LitHTML, the libraries from Google to make you easier build web component. The abstraction goal is less repetition on creating the web component especially to keep sync between the properties (mostly devs call it states) and the DOM. 
 
 # How To Use
 Basically this is an abstraction from HTMLElement that help you write your own custom element. It's not come with rendering function like VDOM or LitHTML, so you can use any library to render efficiently the DOM. Below is an example how to use it with LitHTML to render inside shadowDom
@@ -34,20 +34,34 @@ customElements.define('tint-app',TintApp);
 
 ```
 
-In theory you can access all the properties using `this.<property-name>` and any change to property will automatically call this.render() to update the view. It use `window.requestAnimationFrame()` to render the view to make sure it efficiently rendered.
+In theory you can access all the properties using `this.<property-name>` and any change to property will automatically call `this.render()` to update the view. It use `window.requestAnimationFrame()` to render the view and make sure it efficiently rendered.
 
-## Property
+## Properties
 
-You can declared a complex property like this:
+For element properties You can declared a complex property like this:
 ```
  static get properties(){
         return {
-            title:{
+            header:{
                 type:String,
-                value:'This is the title',
+                value:'This is the header',
                 isAttribute:true, //will reflect to attribute so you can change the property from element attribute
                 observer:'_titleUpdated' // automatically called _titleUpdated() function when the value changed
             }
         };
  }
 ```
+If you set `isAttribute:true` in a property, the property will reflect to an element as element attribute. So you can access it from outside like `<your-element header=""></your-element>`. Any change to attribute will update the property and also rerender the shadowDOM.
+
+If you declare an observer in a property, it will automatically called when the property value changed.
+
+Then after construction, you can acccess them through element instance like `this.<property-name>` for example following the declaration above, you can access the property with `this.title` and `this.content`.
+
+## Methods
+Some important public methods you can use
+
+### `this.render()`
+You need to extend this function whenever you want to create your element. You can use any rendering library like LitHTML or HyperHTML. 
+
+### `this.ready()`
+This method will called once the element is ready and first render already done. So you can do anything with element like DOM manipulation, or API call and update the properties.
