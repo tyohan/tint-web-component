@@ -1,0 +1,23 @@
+{
+  "name": "tintjs",
+  "version": "0.0.1",
+  "description": "Tiny simple component base for web component",
+  "license": "BSD-3-Clause",
+  "repository": "tyohan/tintjs",
+  "main": "tint.js",
+  "module": "tint.js",
+  "author": {
+    "name": "Yohan Totting",
+    "email": "tyohan@gmail.com"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@webcomponents/shadycss": "^1.1.0",
+    "@webcomponents/shadydom": "^1.0.11",
+    "@webcomponents/template": "^1.2.2",
+    "babel-polyfill": "^6.26.0",
+    "chai": "^4.1.2",
+    "mocha": "^3.5.3"
+  }
+}
