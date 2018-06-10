@@ -31,7 +31,6 @@ export default class TintComponent extends HTMLElement {
         for (const key in properties) {
             if (properties.hasOwnProperty(key)) {
                 const prop = properties[key];
-                
                 if(prop!==null && typeof prop==='object'){
                     
                     if(prop.hasOwnProperty('isAttribute') && prop.isAttribute===true){
@@ -45,12 +44,12 @@ export default class TintComponent extends HTMLElement {
                             this.setAttribute(key, this._attributes[key]);
                         } 
 
-                        this._properties[key]=prop.value;
+                        this._properties[key]=prop;
                     }
                 } else {
                     this._properties[key]=prop;
                 }
-                
+
                 Object.defineProperty(this, key, { 
                     get: function() { 
                         if(this._properties[key]!==null && typeof this._properties[key]==='object' && this._properties[key].hasOwnProperty('value')){
@@ -66,21 +65,14 @@ export default class TintComponent extends HTMLElement {
                         if(properties[key]!== null && typeof properties[key]==='object'){
                             
                             if(properties[key].hasOwnProperty('observer')){
-                               
-                                if(typeof properties[key].observer==='function'){
-                                    //call observer if set
-                                    // need to check
-                                    properties[key].observer(oldValue,newValue);
-                                }
-                                else if(typeof properties[key].observer==='string'){
-                                    this[properties[key].observer](oldValue,newValue);
-                                }
+                               this.triggerObserver( properties[key], oldValue,newValue);
+                                
                             }
                             
                         }
                         //update property value;
                         this._properties[key]=newValue;
-
+                        
                         //make sure update attribute if exist
                         if(this._attributes.hasOwnProperty(key)){
                             if(typeof newValue === 'boolean'){
@@ -102,6 +94,16 @@ export default class TintComponent extends HTMLElement {
         }
     }
 
+    triggerObserver(prop,oldValue,newValue){
+        if(typeof prop.observer==='function'){
+            //call observer if set
+            // need to check
+           prop.observer(oldValue,newValue);
+        }
+        else if(typeof prop.observer==='string'){
+            this[prop.observer](oldValue,newValue);
+        }
+    }
     /**
      * 
      * @param {string} name 
@@ -109,8 +111,17 @@ export default class TintComponent extends HTMLElement {
      * @param {mix} newValue - new value of changed attribute
      */
     async attributeChangedCallback(name, oldValue, newValue) {
-        this._properties[name]=newValue;
-        this._attributes[name]=newValue;
+        const value=newValue===''?true:newValue;
+        if(typeof this._properties[name]==='object'){
+            this._properties[name].value=value;
+        } else {
+            this._properties[name]=value;
+        }
+        
+        if(this._properties[name].hasOwnProperty('observer')){
+            this.triggerObserver(this._properties[name],oldValue,value)
+        }
+        this._attributes[name]=value;
         this._updateRendering();
     }
 
