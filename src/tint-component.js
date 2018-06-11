@@ -65,7 +65,7 @@ export default class TintComponent extends HTMLElement {
                         if(properties[key]!== null && typeof properties[key]==='object'){
                             
                             if(properties[key].hasOwnProperty('observer')){
-                               this.triggerObserver( properties[key], oldValue,newValue);
+                               this.triggerObserver( properties[key], oldValue.value,newValue);
                                 
                             }
                             
