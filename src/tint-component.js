@@ -129,7 +129,7 @@ export default class TintComponent extends HTMLElement {
     }
 
     render(){
-        this._shadowRoot.innerHTML = this.getTemplate();
+        this.$.innerHTML = this.getTemplate();
     }
 
     getTemplate(){
@@ -144,6 +144,7 @@ export default class TintComponent extends HTMLElement {
         this._properties={};
         // Attach a shadow root to <custom-element>.
         this._shadowRoot = this.attachShadow({mode: 'open'});
+        this.$=this._shadowRoot;
         this.mapAttributes(this.constructor.properties);
         
       }
