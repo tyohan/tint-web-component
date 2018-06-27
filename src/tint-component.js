@@ -56,8 +56,14 @@ export default class TintComponent extends HTMLElement {
                         } 
 
                         this._properties[key]=prop;
+                    } 
+                } 
+                
+                if(typeof this._properties[key]==='undefined'){
+                    if(typeof prop==='undefined') {
+                        prop = null;
                     }
-                } else {
+                        
                     this._properties[key]=prop;
                 }
 
@@ -80,6 +86,8 @@ export default class TintComponent extends HTMLElement {
                                 
                             }
                             //update object property value;
+                            console.log(this._properties);
+                            console.log(this._properties[key]);
                             this._properties[key].value=newValue;
                         } else {
                             //update property value;
