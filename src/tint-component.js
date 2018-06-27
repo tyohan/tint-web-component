@@ -34,11 +34,22 @@ export default class TintComponent extends HTMLElement {
                 if(prop!==null && typeof prop==='object'){
                     
                     if(prop.hasOwnProperty('isAttribute') && prop.isAttribute===true){
-                        if(prop.hasOwnProperty('value')){
-                            this._attributes[key]=prop.value;
+                        const attr=this.getAttribute(key);
+                        if(attr!==null || attr!==''){
+                            this._attributes[key]=attr;
+                            if(prop.hasOwnProperty('value')){
+                                prop.value=attr;
+                            } else {
+                                prop=attr;
+                            }
                         } else {
-                            this._attributes[key]=null;
-                        }  
+                            if(prop.hasOwnProperty('value')){
+                                this._attributes[key]=prop.value;
+                            } else {
+                                this._attributes[key]=null;
+                            }  
+                        }
+                        
 
                         if( this._attributes[key]!== null){
                             this.setAttribute(key, this._attributes[key]);
@@ -145,8 +156,6 @@ export default class TintComponent extends HTMLElement {
         // Attach a shadow root to <custom-element>.
         this._shadowRoot = this.attachShadow({mode: 'open'});
         this.$=this._shadowRoot;
-        this.mapAttributes(this.constructor.properties);
-        
       }
     
     /**
@@ -173,6 +182,7 @@ export default class TintComponent extends HTMLElement {
      * Callback function that called once element connected to parent element
      */
     connectedCallback(){
+        this.mapAttributes(this.constructor.properties); //mapping attribtues after it's connected to parent
         this._updateRendering();
     }
 
