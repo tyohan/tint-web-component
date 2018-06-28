@@ -34,8 +34,12 @@ export default class TintComponent extends HTMLElement {
                 if(prop!==null && typeof prop==='object'){
                     
                     if(prop.hasOwnProperty('isAttribute') && prop.isAttribute===true){
-                        const attr=this.getAttribute(key);
-                        if(attr!==null || attr!==''){
+                        let attr=this.getAttribute(key);
+                        if(attr!==null){
+                            if(attr===''){
+                                attr=true;
+                            }
+
                             this._attributes[key]=attr;
                             if(prop.hasOwnProperty('value')){
                                 prop.value=attr;
@@ -51,8 +55,9 @@ export default class TintComponent extends HTMLElement {
                         }
                         
 
-                        if( this._attributes[key]!== null){
-                            this.setAttribute(key, this._attributes[key]);
+                        if( this._attributes[key]!== null && this._attributes[key]!==false){
+                            const attrValue=this._attributes[key]===true?'':this._attributes[key];
+                            this.setAttribute(key, attrValue);
                         } 
 
                         this._properties[key]=prop;
@@ -86,8 +91,6 @@ export default class TintComponent extends HTMLElement {
                                 
                             }
                             //update object property value;
-                            console.log(this._properties);
-                            console.log(this._properties[key]);
                             this._properties[key].value=newValue;
                         } else {
                             //update property value;
